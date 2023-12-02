@@ -75,8 +75,14 @@ class KartAPI(serializerType: Serializer) {
         serializer.write(karts)
     }
 
+    private fun formatListString(kartsToFormat : List<Kart>) : String =
+        kartsToFormat
+            .joinToString (separator = "\n") { kart ->
+                karts.indexOf(kart).toString() + ": " + kart.toString() }
 
 }
+
+
 
 
 
