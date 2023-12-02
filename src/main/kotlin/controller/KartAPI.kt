@@ -6,12 +6,21 @@ import java.util.ArrayList
 
 class KartAPI(serializerType: Serializer) {
     private var serializer: Serializer = serializerType
+    private var karts: MutableList<Kart> = mutableListOf()
 
-    private var karts = ArrayList<Kart>()
+
+    private var lastId = 0
+    private fun getId() = lastId++
+
 
     fun add(kart: Kart): Boolean {
+        kart.KartId = getId()
         return karts.add(kart)
     }
+
+
+
+
 
 
 
