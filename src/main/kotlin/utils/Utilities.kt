@@ -1,6 +1,7 @@
 package utils
 import models.Lap
 import models.Kart
+import controller.KartAPI
 object Utilities {
     @JvmStatic
     fun formatListString(kartsToFormat: List<Kart>): String =
@@ -12,4 +13,16 @@ object Utilities {
         lapsToFormat
             .joinToString(separator = "\n") { lap ->  "\t$lap" }
 
+    @JvmStatic
+    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+        return (index >= 0 && index < list.size)
+    }
+
+
+    @JvmStatic
+    fun validRange(numberToCheck: Int, min: Int, max: Int): Boolean {
+        return numberToCheck in min..max
+    }
+
 }
+
