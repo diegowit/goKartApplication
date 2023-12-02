@@ -2,6 +2,7 @@ package controller
 import models.Lap
 import models.Kart
 import persistence.Serializer
+import utils.Utilities.formatListString
 import utils.Utilities.isValidListIndex
 import java.util.ArrayList
 
@@ -54,7 +55,13 @@ class KartAPI(serializerType: Serializer) {
         //if the note was not found, return false, indicating that the update was not successful
         return false
     }
+
+    fun listAllKart(): String =
+        if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
+        else formatListString(karts) // Format the list of all notes.
 }
+
+
 
 
 
