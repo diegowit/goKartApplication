@@ -36,6 +36,24 @@ class KartAPI(serializerType: Serializer) {
         } else null
     }
 
+    fun updateKart(indexToUpdate: Int, kart: Kart?): Boolean {
+        //find the note object by the index number
+        val foundKart = findKart(indexToUpdate)
+
+        //if the note exists, use the note details passed as parameters to update the found note in the ArrayList.
+        if ((foundKart != null) && (kart != null)) {
+            foundKart.KartId = kart.KartId
+            foundKart.model = kart.model
+            foundKart.weight = kart.weight
+            foundKart.maxSpeed = kart.maxSpeed
+            foundKart.enginePower = kart.enginePower
+            foundKart.isElectric = kart.isElectric
+            foundKart.laps = kart.laps
+            return true
+        }
+        //if the note was not found, return false, indicating that the update was not successful
+        return false
+    }
 }
 
 
