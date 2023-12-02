@@ -1,13 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.0"
-    // Plugin for Dokka - KDoc generating tool
-    id("org.jetbrains.dokka") version "1.9.10"
-    // Code coverage tool
-    jacoco
-    // Plugin for Ktlint
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+    kotlin("jvm") version "1.8.0"
     application
 }
 group = "me.diego"
@@ -35,8 +29,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    //report is always generated after tests run
-    finalizedBy(tasks.jacocoTestReport)
+
 }
 
 kotlin {
