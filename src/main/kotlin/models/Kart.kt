@@ -8,7 +8,7 @@ data class Kart(
     var maxSpeed: Double,
     var enginePower: Int,
     var isElectric: Boolean,
-    //var laps : MutableSet<Lap> = mutableSetOf()
+    //var labs: MutableSet<Lap> = mutableSetOf()
 
 
 
