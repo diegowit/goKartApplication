@@ -8,8 +8,8 @@ object Utilities {
             .joinToString(separator = "\n") { kart ->  "$kart" }
 
     @JvmStatic
-    fun formatSetString(labsToFormat: Set<Lap>): String =
-        labsToFormat
-            .joinToString(separator = "\n") { lab ->  "\t$lab" }
+    fun formatSetString(lapsToFormat: Set<Lap>): String =
+        lapsToFormat
+            .joinToString(separator = "\n") { lap ->  "\t$lap" }
 
 }

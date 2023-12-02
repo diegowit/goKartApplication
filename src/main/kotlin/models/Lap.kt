@@ -10,4 +10,8 @@ data class Lap (
     val lapCompleted: Boolean
 
         )
+{
+    override fun toString() = "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $lapCompleted"
+
+}
 
