@@ -18,6 +18,11 @@ class KartAPI(serializerType: Serializer) {
         return karts.add(kart)
     }
 
+    fun delete(id: Int) = karts.removeIf{kart -> kart.KartId == id}
+
+
+
+
 
 
 
