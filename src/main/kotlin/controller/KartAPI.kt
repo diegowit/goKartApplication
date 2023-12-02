@@ -59,7 +59,15 @@ class KartAPI(serializerType: Serializer) {
     fun listAllKart(): String =
         if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
         else formatListString(karts) // Format the list of all notes.
+
+
+    fun numberOfKarts(): Int = karts.size
+
+
+
 }
+
+
 
 
 
