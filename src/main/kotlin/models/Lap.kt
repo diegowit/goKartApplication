@@ -7,11 +7,20 @@ data class Lap (
     var distance: Double,
     val time: Double,
     val speed: Double,
-    val lapCompleted: Boolean
+    val isLapCompleted: Boolean = false
 
         )
+
 {
-    override fun toString() = "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $lapCompleted"
+    override fun toString(): String {
+
+        if (isLapCompleted)
+            return "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $isLapCompleted\" (Yes)   "
+        else
+            return "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $isLapCompleted\" (No)   "
+
+
+    }
 
 
 }
