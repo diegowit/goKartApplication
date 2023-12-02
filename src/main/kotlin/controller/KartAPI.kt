@@ -65,6 +65,17 @@ class KartAPI(serializerType: Serializer) {
 
 
 
+    @Throws(Exception::class)
+    fun load() {
+        karts = serializer.read() as ArrayList<Kart>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(karts)
+    }
+
+
 }
 
 
