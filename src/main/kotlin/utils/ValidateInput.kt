@@ -20,9 +20,9 @@ object ValidateInput {
 
     @JvmStatic
     fun readValidWeight(prompt: String?): Int {
-        var input =  readNextInt(prompt)
+        var input = readNextInt(prompt)
         do {
-            if (Utilities.validRange(input, 70 ,80))
+            if (Utilities.validRange(input, 70, 80))
                 return input
             else {
                 print("Invalid weight $input.")
@@ -30,7 +30,4 @@ object ValidateInput {
             }
         } while (true)
     }
-
 }
-
-

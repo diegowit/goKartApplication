@@ -1,19 +1,15 @@
 import controller.KartAPI
-import  models.Kart
+import models.Kart
 import models.Lap
-import utils.ScannerInput.readNextChar
-import utils.ScannerInput.readNextInt
-import utils.ScannerInput.readNextLine
 import mu.KotlinLogging
 import persistence.JSONSerializer
-import utils.ModelUtility.isValidmodel
-import java.io.File
-import utils.ScannerInput
+import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextDouble
+import utils.ScannerInput.readNextInt
+import utils.ScannerInput.readNextLine
 import utils.ValidateInput.readValidModel
 import utils.ValidateInput.readValidWeight
-
-
+import java.io.File
 import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
@@ -35,8 +31,6 @@ fun runMainMenu() {
         }
     } while (true)
 }
-
-
 
 /**
  *
@@ -83,7 +77,6 @@ fun mainMenu(): Int {
     )
 }
 
-
 /**
  *
  *  Karts
@@ -98,7 +91,7 @@ fun runKartMenu() {
             3 -> updateKart()
             4 -> deleteKart()
             5 -> makeItElectric()
-            //6 -> runSearchMenu()
+            6 -> runSearch()
             20 -> save()
             21 -> load()
             0 -> return // Return to main menu
@@ -111,7 +104,7 @@ fun contactMenu(): Int {
     return readNextInt(
         """
 ╔═══════════════════════════════════════════════════╗
-║                   CONTACT MENU                    ║
+║                   Kart MENU                       ║
 ╠═══════════════════════════════════════════════════╣
 ║   1) Add a Kart                                   ║
 ║   2) Run Listing Menu                             ║
@@ -134,7 +127,7 @@ fun addKart() {
     val weight = readValidWeight("Enter a weight between (70 to 80 kg): ")
     val maxSpeed = readNextDouble("Enter the Kart Max Speed in kph ")
     val enginePower = readNextInt("Enter the Engine Power in Horsepower ")
-    val isAdded = kartAPI.add(Kart(model = model, weight = weight, maxSpeed = maxSpeed,enginePower = enginePower ))
+    val isAdded = kartAPI.add(Kart(model = model, weight = weight, maxSpeed = maxSpeed, enginePower = enginePower))
 
     if (isAdded) {
         println("Added Successfully")
@@ -142,7 +135,6 @@ fun addKart() {
         println("Add Failed")
     }
 }
-
 
 fun updateKart() {
     listAllKarts()
@@ -154,7 +146,7 @@ fun updateKart() {
             val maxSpeed = readNextDouble("Enter the Kart Max Speed in kph ")
             val enginePower = readNextInt("Enter the Engine Power in Horsepower ")
 
-            if (kartAPI.updateKart(id, Kart(0, model, weight, maxSpeed, enginePower, false))){
+            if (kartAPI.updateKart(id, Kart(0, model, weight, maxSpeed, enginePower, false))) {
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -212,79 +204,182 @@ fun runListingMenu() {
                   > |   4) List by                    |
                   > |   5) List By                     |
                   > ----------------------------------
-                  > ==>> """.trimMargin(">"))
-
+                  > ==>> """.trimMargin(">")
+        )
 
         when (option) {
             1 -> listAllKarts()
             2 -> listFuelKart()
             3 -> listElectricKart()
-           // 4 -> runPriority()
-           // 5 -> runReminder()
+            // 4 -> runPriority()
+            // 5 -> runReminder()
             // Handle unexpected option entries.
             else -> println("Invalid option entered: $option")
         }
     } else {
 
-        println("Option Invalid - No notes stored")
+        println("Option Invalid - No Karts stored")
     }
 }
-
 
 fun listAllKarts() {
     println(kartAPI.listAllKart())
 }
 
-
 fun listFuelKart() {
     println(kartAPI.listFuelKarts())
 }
-
 
 fun listElectricKart() {
     println(kartAPI.listElectricKarts())
 }
 
+/**
+ *
+ *  Search Notes Menu
+ *
+ */
+fun runSearch() {
 
-    /**
-     *
-     *  Karts
-     *
-     */
+    do {
+        when (val option = searchMenu()) {
+            1 -> searchKartByModel()
+            2 -> searchKartByWeight()
+            3 -> searchKartByEnginePower()
 
-    fun runLapMenu() {
-        do {
-            when (val option = lapMenu()) {
-                1 -> addLapToKart()
-                2 -> listAllLaps()
+            0 -> return // Return to main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
 
-                0 -> return // Return to main menu
-                else -> println("Invalid menu choice: $option")
-            }
-        } while (true)
+fun searchMenu(): Int {
+
+    print(
+        """
+╔═══════════════════════════════════════════════════╗
+║                   Search  Menu                    ║
+╠═══════════════════════════════════════════════════╣
+║   1) Search Kart By Model                         ║
+║   2) Search Kart By Weight                        ║
+║   3) Search Kart By Engine Power                  ║
+║                                                   ║
+║                                                   ║
+║                                                   ║
+╚═══════════════════════════════════════════════════╝
+║   0) Return to Main Menu                          ║
+╚═══════════════════════════════════════════════════╝
+            
+            
+       ==>> """.trimMargin()
+    )
+    return readLine()!!.toInt()
+    // Returning the user input as an integer.
+}
+
+fun searchKartByModel() {
+
+    val searchModel = readNextLine("Enter the model to search by:(Tony Kart, Birel, Other) ")
+
+    val searchResults = kartAPI.searchByModel(searchModel)
+
+    if (searchResults.isEmpty()) {
+
+        println("No Model found")
+    } else {
+
+        println(searchResults)
     }
-    fun lapMenu(): Int {
-        return readNextInt(
-            """
+}
+
+fun searchKartByWeight() {
+    val searchWeight = readNextInt("Enter Weight of the kart")
+
+    val searchResults = kartAPI.searchByWeight(searchWeight)
+
+    if (searchResults.isEmpty()) {
+        println("No Kart found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun searchKartByEnginePower() {
+    val searchEP = readNextInt("Enter Engine Power of the kart")
+
+    val searchResults = kartAPI.searchByEP(searchEP)
+
+    if (searchResults.isEmpty()) {
+        println("No Kart found")
+    } else {
+        println(searchResults)
+    }
+}
+
+/**
+ *
+ *  Karts
+ *
+ */
+
+fun runLapMenu() {
+    do {
+        when (val option = lapMenu()) {
+            1 -> addLapToKart()
+            2 -> deleteALap()
+            3 -> updateLapDetailsInKart()
+            4 -> markLapCompletion()
+            5 -> runLapSearchMenu()
+
+            0 -> return // Return to main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
+
+// fun listAllLaps() {
+//   val kart: Kart? = listingLapsForAll()
+//   println(kart)
+// }
+
+fun lapMenu(): Int {
+    return readNextInt(
+        """
 ╭───────────────────────────────────────────────────╮
-│                   GROUP MENU                      │
+│                   Lap MENU                        │
 ├───────────────────────────────────────────────────┤
 │   1) Add a Lap to Kart                            │
-│   2) List All Laps                                │
+│   2) update Lap details                           │
+│   3) delete a lap                                 │
+│   4) Mark Lap as a complete or not complete       │
+│   5) Run Search Menu                              │
 ├───────────────────────────────────────────────────┤
 │   0) Return to Main Menu                          │
 ╰───────────────────────────────────────────────────╯
 ==>> """.trimMargin(">")
-        )
-
-    }
-
+    )
+}
 
 fun addLapToKart() {
     val kart: Kart? = askUserToChooseFuelKart()
     if (kart != null) {
-        val completedLap = readNextLine("lap details: ")
-        if (kart.addLap(Lap(completedLap = completedLap))) {
+        val driverName = readNextLine("Enter driver name: ")
+        val driverAge = readNextInt("Enter driver age: ")
+        val distance = readNextDouble("Enter lap distance: ")
+        val time = readNextDouble("Enter lap time: ")
+        val speed = readNextDouble("Enter lap speed: ")
+        val completedLapDetails = readNextLine("Enter lap details: ")
+
+        val lapToAdd = Lap(
+            driverName = driverName,
+            driverAge = driverAge,
+            distance = distance,
+            time = time,
+            speed = speed,
+            completedLap = completedLapDetails
+        )
+
+        if (kart.addLap(lapToAdd)) {
             println("Add Successful!")
         } else {
             println("Add NOT Successful")
@@ -292,13 +387,133 @@ fun addLapToKart() {
     }
 }
 
+fun markLapCompletion() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            var changeStatus = 'X'
+            if (lap.isLapCompleted) {
+                changeStatus = readNextChar("The lap is currently complete...do you want to mark it as Not Completed?")
+                if ((changeStatus == 'Y') || (changeStatus == 'y')) {
+                    lap.isLapCompleted = false
+                    println("Marked lap as Not Completed.")
+                }
+            } else {
+                changeStatus = readNextChar("The lap is currently Not Completed...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') || (changeStatus == 'y')) {
+                    lap.isLapCompleted = true
+                    println("Marked lap as Complete.")
+                }
+            }
+        }
+    }
+}
+fun deleteALap() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            val isDeleted = kart.deleteLap(lap.lapId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+fun updateLapDetailsInKart() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            val newDetails = readNextLine("Enter new lap details: ")
+            val updatedLap = Lap(
+                lapId = lap.lapId,
+                driverName = lap.driverName,
+                driverAge = lap.driverAge,
+                distance = lap.distance,
+                time = lap.time,
+                speed = lap.speed,
+                completedLap = newDetails,
+                isLapCompleted = lap.isLapCompleted
+            )
+            if (kart.updateLap(lap.lapId, updatedLap)) {
+                println("Lap details updated")
+            } else {
+                println("Lap details NOT updated")
+            }
+        } else {
+            println("Invalid Lap Id")
+        }
+    }
+}
 
+/**
+ *
+ *  Lap Search
+ *
+ */
 
+fun runLapSearchMenu() {
 
+    if (kartAPI.numberOfKarts() > 0) {
 
-//------------------------------------
-//HELPER FUNCTIONS
-//------------------------------------
+        val option = readNextInt(
+            """
+                  > ----------------------------------
+                  > |   1) search Laps              |
+                  > |   2) List Not Completed Laps  |
+                  > |   3) Search By Driver Name    |
+                  > ----------------------------------
+                  > ==>> """.trimMargin(">")
+        )
+
+        when (option) {
+            1 -> searchLaps()
+            2 -> listNotCompletedLaps()
+            3 -> searchByName()
+
+            // Handle unexpected option entries.
+            else -> println("Invalid option entered: $option")
+        }
+    } else {
+
+        println("Option Invalid - No Laps stored")
+    }
+}
+
+fun searchLaps() {
+    val searchDetails = readNextLine("Enter lap details to search by: ")
+    val searchResults = kartAPI.SearchLapsNotCompleted(searchDetails)
+    if (searchResults.isEmpty()) {
+        println("No laps found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun listNotCompletedLaps() {
+    if (kartAPI.numberOfNotCompletedLaps() > 0) {
+        println("Total of not completed laps: ${kartAPI.numberOfNotCompletedLaps()}")
+    }
+    println(kartAPI.listFuelKarts())
+}
+
+fun searchByName() {
+    val searchName = readNextLine("Enter the Name of the Driver: ")
+    val searchResults = kartAPI.searchLapByDriverName(searchName)
+    if (searchResults.isEmpty()) {
+        println("No Laps found")
+    } else {
+        println(searchResults)
+    }
+}
+
+// ------------------------------------
+// HELPER FUNCTIONS
+// ------------------------------------
 
 private fun askUserToChooseFuelKart(): Kart? {
     listFuelKart()
@@ -308,65 +523,64 @@ private fun askUserToChooseFuelKart(): Kart? {
             if (kart.isElectric) {
                 println("Kart is NOT Fuel, it is Electric")
             } else {
-                return kart //chosen kart is fuel
+                return kart // chosen kart is fuel
             }
         } else {
             println("Kart id is not valid")
         }
     }
-    return null //selected Kart is not active
+    return null // selected Kart is not active
 }
 
 private fun askUserToChooseLap(kart: Kart): Lap? {
-    if (kart.numberOfLaps() > 0) {
+    return if (kart.numberOfLaps() > 0) {
         print(kart.listLaps())
-        return kart.findOne(readNextInt("\nEnter the id of the Lap: "))
+        kart.findOne(readNextInt("\nEnter the id of the Lap: "))
+    } else {
+        println("No Laps for chosen note")
+        null
     }
-    else{
-        println ("No Laps for chosen note")
-        return null
+}
+/**
+private fun listingLapsForAll(kart: Kart): Kart? {
+ if (kart.numberOfLaps() > 0) {
+ println(kart.listLaps())
+ println("\nAll Laps ")
+ } else {
+ println("No Laps stored")
+ }
+
+}
+**/
+fun save() {
+    try {
+        kartAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
     }
 }
 
-
-
-
-
-    fun save() {
-        try {
-            kartAPI.store()
-        } catch (e: Exception) {
-            System.err.println("Error writing to file: $e")
-        }
+fun load() {
+    try {
+        kartAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
     }
+}
 
-    fun load() {
-        try {
-            kartAPI.load()
-        } catch (e: Exception) {
-            System.err.println("Error reading from file: $e")
-        }
-    }
-
-    fun exitApp() {
-        println(
-            "_______  _______  _______    __   __  _______  __   __    _______  _______  _______  __    _ \n" +
-                    "|       ||       ||       |  |  | |  ||       ||  | |  |  |       ||       ||       ||  |  | |\n" +
-                    "|  _____||    ___||    ___|  |  |_|  ||   _   ||  | |  |  |  _____||   _   ||   _   ||   |_| |\n" +
-                    "| |_____ |   |___ |   |___   |       ||  | |  ||  |_|  |  | |_____ |  | |  ||  | |  ||       |\n" +
-                    "|_____  ||    ___||    ___|  |_     _||  |_|  ||       |  |_____  ||  |_|  ||  |_|  ||  _    |\n" +
-                    " _____| ||   |___ |   |___     |   |  |       ||       |   _____| ||       ||       || | |   |\n" +
-                    "|_______||_______||_______|    |___|  |_______||_______|  |_______||_______||_______||_|  |__|\n" +
-                    "                                                                                              \n" +
-                    "\n" +
-                    "      Thank you for using This App!\n" +
-                    "Exiting... Have a great day!"
-        )
-        exitProcess(0)
-    }
-
-
-
-
-
-
+fun exitApp() {
+    println(
+        "_______  _______  _______    __   __  _______  __   __    _______  _______  _______  __    _ \n" +
+            "|       ||       ||       |  |  | |  ||       ||  | |  |  |       ||       ||       ||  |  | |\n" +
+            "|  _____||    ___||    ___|  |  |_|  ||   _   ||  | |  |  |  _____||   _   ||   _   ||   |_| |\n" +
+            "| |_____ |   |___ |   |___   |       ||  | |  ||  |_|  |  | |_____ |  | |  ||  | |  ||       |\n" +
+            "|_____  ||    ___||    ___|  |_     _||  |_|  ||       |  |_____  ||  |_|  ||  |_|  ||  _    |\n" +
+            " _____| ||   |___ |   |___     |   |  |       ||       |   _____| ||       ||       || | |   |\n" +
+            "|_______||_______||_______|    |___|  |_______||_______|  |_______||_______||_______||_|  |__|\n" +
+            "                                                                                              \n" +
+            "\n" +
+            "      Thank you for using This App!\n" +
+            "Exiting... Have a great day!"
+    )
+    exitProcess(0)
+}

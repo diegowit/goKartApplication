@@ -3,7 +3,7 @@ package utils
 object ModelUtility {
 
     @JvmStatic
-    val models = setOf ("Sodikart", "Tony Kart", "Birel", "Kosmic Kart", "Other")
+    val models = setOf("Sodikart", "Tony Kart", "Birel", "Kosmic Kart", "Other")
 
     @JvmStatic
     fun isValidmodel(modelToCheck: String?): Boolean {
@@ -14,5 +14,4 @@ object ModelUtility {
         }
         return false
     }
-
 }

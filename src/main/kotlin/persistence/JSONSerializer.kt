@@ -1,6 +1,5 @@
 package persistence
 
-
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver
 import models.Kart
