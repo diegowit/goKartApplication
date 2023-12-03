@@ -29,12 +29,14 @@ fun runMainMenu() {
     do {
         when (val option = mainMenu()) {
             1 -> runKartMenu()
-         //   2 -> runLapMenu()
-          //  0 -> exitApp()
+            2 -> runLapMenu()
+            0 -> exitApp()
             else -> println("Invalid menu choice: $option")
         }
     } while (true)
 }
+
+
 
 /**
  *
@@ -81,6 +83,7 @@ fun mainMenu(): Int {
     )
 }
 
+
 /**
  *
  *  Karts
@@ -96,8 +99,8 @@ fun runKartMenu() {
             4 -> deleteKart()
             5 -> makeItElectric()
             //6 -> runSearchMenu()
-            //20 -> save()
-            //21 -> load()
+            20 -> save()
+            21 -> load()
             0 -> return // Return to main menu
             else -> println("Invalid menu choice: $option")
         }
@@ -240,15 +243,84 @@ fun listFuelKart() {
 
 fun listElectricKart() {
     println(kartAPI.listElectricKarts())
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
+    /**
+     *
+     *  Karts
+     *
+     */
+
+    fun runLapMenu() {
+        do {
+            when (val option = lapMenu()) {
+                1 -> addLapToKart()
+                2 -> listAllLaps()
+
+                0 -> return // Return to main menu
+                else -> println("Invalid menu choice: $option")
+            }
+        } while (true)
+    }
+    fun lapMenu(): Int {
+        return readNextInt(
+            """
+╭───────────────────────────────────────────────────╮
+│                   GROUP MENU                      │
+├───────────────────────────────────────────────────┤
+│   1) Add a Lap to Kart                            │
+│                                                   │
+├───────────────────────────────────────────────────┤
+│   0) Return to Main Menu                          │
+╰───────────────────────────────────────────────────╯
+==>> """.trimMargin(">")
+        )
+    }
+
+
+
+
+
+
+
+
+
+    fun save() {
+        try {
+            kartAPI.store()
+        } catch (e: Exception) {
+            System.err.println("Error writing to file: $e")
+        }
+    }
+
+    fun load() {
+        try {
+            kartAPI.load()
+        } catch (e: Exception) {
+            System.err.println("Error reading from file: $e")
+        }
+    }
+
+    fun exitApp() {
+        println(
+            "_______  _______  _______    __   __  _______  __   __    _______  _______  _______  __    _ \n" +
+                    "|       ||       ||       |  |  | |  ||       ||  | |  |  |       ||       ||       ||  |  | |\n" +
+                    "|  _____||    ___||    ___|  |  |_|  ||   _   ||  | |  |  |  _____||   _   ||   _   ||   |_| |\n" +
+                    "| |_____ |   |___ |   |___   |       ||  | |  ||  |_|  |  | |_____ |  | |  ||  | |  ||       |\n" +
+                    "|_____  ||    ___||    ___|  |_     _||  |_|  ||       |  |_____  ||  |_|  ||  |_|  ||  _    |\n" +
+                    " _____| ||   |___ |   |___     |   |  |       ||       |   _____| ||       ||       || | |   |\n" +
+                    "|_______||_______||_______|    |___|  |_______||_______|  |_______||_______||_______||_|  |__|\n" +
+                    "                                                                                              \n" +
+                    "\n" +
+                    "      Thank you for using This App!\n" +
+                    "Exiting... Have a great day!"
+        )
+        exitProcess(0)
+    }
+
+
+
+
+
+
