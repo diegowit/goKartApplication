@@ -50,7 +50,6 @@ class KartAPI(serializerType: Serializer) {
             foundKart.maxSpeed = kart.maxSpeed
             foundKart.enginePower = kart.enginePower
             foundKart.isElectric = kart.isElectric
-            foundKart.isFuel = kart.isFuel
             foundKart.laps = kart.laps
             return true
         }

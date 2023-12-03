@@ -3,12 +3,11 @@ import utils.Utilities
 data class Kart(
 
     var KartId: Int = 0,
-    var model: String ="Birel",
+    var model: String,
     var weight: Int,
     var maxSpeed: Double,
     var enginePower: Int,
     var isElectric: Boolean = false,
-    var isFuel: Boolean,
     var laps: MutableSet<Lap> = mutableSetOf()
 
 ) {
@@ -65,8 +64,6 @@ fun listLaps() =
         val electric = if (isElectric) 'Y' else 'N'
         return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($electric) \n${listLaps()}"
     }
-
-
 
 
 
