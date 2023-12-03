@@ -94,7 +94,7 @@ fun runKartMenu() {
             2 -> runListingMenu()
             3 -> updateKart()
             4 -> deleteKart()
-            //5 -> makeItElectric()
+            5 -> makeItElectric()
             //6 -> runSearchMenu()
             //20 -> save()
             //21 -> load()
@@ -181,13 +181,18 @@ fun deleteKart() {
 }
 
 fun makeItElectric() {
-    listAllKarts()
     if (kartAPI.numberOfFuelKarts() > 0) {
-        val  id = readNextInt("Enter the Id of the Electric Kart")
-        if (kartAPI)
+        listAllKarts()
 
+        val id = readNextInt("Enter the Id of the Electric Kart: ")
 
-
+        if (kartAPI.isKartElectric(id)) {
+            println("Conversion to Electric Successful!")
+        } else {
+            println("Conversion to Electric NOT Successful. Kart with ID $id not found or does not meet conversion criteria.")
+        }
+    } else {
+        println("No fuel-based karts available for conversion.")
     }
 }
 
