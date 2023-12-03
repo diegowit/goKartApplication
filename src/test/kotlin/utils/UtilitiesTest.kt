@@ -8,6 +8,7 @@ import models.Lap
 
 class UtilitiesTest {
 
+
     @Test
     fun validRangeWorksWithPositiveTestData() {
         Assertions.assertTrue(Utilities.validRange(5, 0, 10))
