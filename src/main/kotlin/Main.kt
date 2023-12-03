@@ -6,9 +6,7 @@ import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import mu.KotlinLogging
 import persistence.JSONSerializer
-import utils.ModelUtility.isValidmodel
 import java.io.File
-import utils.ScannerInput
 import utils.ScannerInput.readNextDouble
 import utils.ValidateInput.readValidModel
 import utils.ValidateInput.readValidWeight
@@ -98,7 +96,7 @@ fun runKartMenu() {
             3 -> updateKart()
             4 -> deleteKart()
             5 -> makeItElectric()
-            //6 -> runSearchMenu()
+            6 -> runSearch()
             20 -> save()
             21 -> load()
             0 -> return // Return to main menu
@@ -111,7 +109,7 @@ fun contactMenu(): Int {
     return readNextInt(
         """
 ╔═══════════════════════════════════════════════════╗
-║                   CONTACT MENU                    ║
+║                   Kart MENU                       ║
 ╠═══════════════════════════════════════════════════╣
 ║   1) Add a Kart                                   ║
 ║   2) Run Listing Menu                             ║
@@ -226,7 +224,7 @@ fun runListingMenu() {
         }
     } else {
 
-        println("Option Invalid - No notes stored")
+        println("Option Invalid - No Karts stored")
     }
 }
 
@@ -246,6 +244,93 @@ fun listElectricKart() {
 }
 
 
+/**
+ *
+ *  Search Notes Menu
+ *
+ */
+fun runSearch () {
+
+    do {
+        when (val option = searchMenu()) {
+            1 ->  searchKartByModel()
+            2 ->  searchKartByWeight()
+            3 ->  searchKartByEnginePower()
+
+
+
+            0 -> return // Return to main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
+
+fun searchMenu(): Int {
+
+    print(
+        """
+╔═══════════════════════════════════════════════════╗
+║                   Search  Menu                    ║
+╠═══════════════════════════════════════════════════╣
+║   1) Search Kart By Model                         ║
+║   2) Search Kart By Weight                        ║
+║   3) Search Kart By Engine Power                  ║
+║                                                   ║
+║                                                   ║
+║                                                   ║
+╚═══════════════════════════════════════════════════╝
+║   0) Return to Main Menu                          ║
+╚═══════════════════════════════════════════════════╝
+            
+            
+       ==>> """.trimMargin()
+    )
+    return readLine()!!.toInt()
+    // Returning the user input as an integer.
+}
+
+
+fun searchKartByModel() {
+
+    val searchModel = readNextLine("Enter the model to search by:(Tony Kart, Birel, Other) ")
+
+    val searchResults = kartAPI.searchByModel(searchModel)
+
+    if (searchResults.isEmpty()) {
+
+        println("No Model found")
+    } else {
+
+        println(searchResults)
+    }
+}
+
+fun searchKartByWeight() {
+    val searchWeight = readNextInt("Enter Weight of the kart")
+
+    val searchResults = kartAPI.searchByWeight(searchWeight)
+
+    if (searchResults.isEmpty()) {
+        println("No Kart found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun searchKartByEnginePower(){
+    val searchEP = readNextInt("Enter Engine Power of the kart")
+
+    val searchResults = kartAPI.searchByEP(searchEP)
+
+    if (searchResults.isEmpty()) {
+        println("No Kart found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+
     /**
      *
      *  Karts
@@ -259,6 +344,7 @@ fun listElectricKart() {
                 2 -> deleteALap()
                 3 -> updateLapDetailsInKart()
                 4 -> markLapCompletion()
+                5 -> runLapSearchMenu()
 
                 0 -> return // Return to main menu
                 else -> println("Invalid menu choice: $option")
@@ -276,12 +362,13 @@ fun lapMenu(): Int {
         return readNextInt(
             """
 ╭───────────────────────────────────────────────────╮
-│                   GROUP MENU                      │
+│                   Lap MENU                        │
 ├───────────────────────────────────────────────────┤
 │   1) Add a Lap to Kart                            │
 │   2) update Lap details                           │
 │   3) delete a lap                                 │
 │   4) Mark Lap as a complete or not complete       │
+│   5) Run Search Menu                              │
 ├───────────────────────────────────────────────────┤
 │   0) Return to Main Menu                          │
 ╰───────────────────────────────────────────────────╯
@@ -381,6 +468,60 @@ fun updateLapDetailsInKart() {
         }
     }
 }
+
+/**
+ *
+ *  Lap Search
+ *
+ */
+
+fun runLapSearchMenu() {
+
+    if (kartAPI.numberOfKarts() > 0) {
+
+        val option = readNextInt(
+            """
+                  > ----------------------------------
+                  > |   1) search Laps              |
+                  > |   2) List Not Completed Laps  |
+               
+                  > ----------------------------------
+                  > ==>> """.trimMargin(">"))
+
+
+        when (option) {
+            1 -> searchLaps()
+            2 -> listNotCompletedLaps()
+
+
+            // Handle unexpected option entries.
+            else -> println("Invalid option entered: $option")
+        }
+    } else {
+
+        println("Option Invalid - No Laps stored")
+    }
+}
+
+fun searchLaps() {
+    val searchDetails = readNextLine("Enter lap details to search by: ")
+    val searchResults = kartAPI.SearchLapsNotCompleted(searchDetails)
+    if (searchResults.isEmpty()) {
+        println("No laps found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun listNotCompletedLaps() {
+  if (kartAPI.numberOfNotCompletedLaps() > 0){
+      println("Total of not completed laps: ${kartAPI.numberOfNotCompletedLaps()}")
+  }
+    println(kartAPI.listFuelKarts())
+}
+
+
 
 //------------------------------------
 //HELPER FUNCTIONS

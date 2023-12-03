@@ -1,9 +1,7 @@
 package controller
-import models.Lap
 import models.Kart
 import persistence.Serializer
 import utils.Utilities
-import utils.Utilities.formatListString
 import utils.Utilities.isValidListIndex
 import java.util.ArrayList
 
@@ -87,6 +85,7 @@ class KartAPI(serializerType: Serializer) {
 
 
 
+
     fun numberOfKarts(): Int = karts.size
     fun numberOfElectricKarts(): Int = karts.count { kart: Kart -> kart.isElectric}
     fun numberOfFuelKarts(): Int = karts.count { kart: Kart -> !kart.isElectric}
@@ -94,7 +93,21 @@ class KartAPI(serializerType: Serializer) {
 
 
 
-    fun listLapsNotCompleted(): String =
+
+    fun searchByModel(searchString: String) =
+        formatListString(karts.filter { kart -> kart.model.contains(searchString, ignoreCase = true) })
+
+    fun searchByWeight(searchInt: Int) =
+        formatListString(karts.filter { kart -> kart.weight == searchInt })
+
+    fun searchByEP(searchInt: Int) =
+        formatListString(karts.filter { kart -> kart.enginePower == searchInt })
+
+
+
+
+
+    fun SearchLapsNotCompleted(searchDetails: String): String =
         if (numberOfKarts() ==0) "No Karts stored"
     else {
 
