@@ -270,17 +270,63 @@ fun listElectricKart() {
 │                   GROUP MENU                      │
 ├───────────────────────────────────────────────────┤
 │   1) Add a Lap to Kart                            │
-│                                                   │
+│   2) List All Laps                                │
 ├───────────────────────────────────────────────────┤
 │   0) Return to Main Menu                          │
 ╰───────────────────────────────────────────────────╯
 ==>> """.trimMargin(">")
         )
+
     }
 
 
+fun addLapToKart() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val completedLap = readNextLine("lap details: ")
+        if (kart.addLap(Lap(completedLap = completedLap))) {
+            println("Add Successful!")
+        } else {
+            println("Add NOT Successful")
+        }
+    }
+}
 
 
+
+
+
+//------------------------------------
+//HELPER FUNCTIONS
+//------------------------------------
+
+private fun askUserToChooseFuelKart(): Kart? {
+    listFuelKart()
+    if (kartAPI.numberOfFuelKarts() > 0) {
+        val kart = kartAPI.findKart(readNextInt("\nEnter the id of the Kart: "))
+        if (kart != null) {
+            if (kart.isElectric) {
+                println("Kart is NOT Fuel, it is Electric")
+            } else {
+                return kart //chosen kart is fuel
+            }
+        } else {
+            println("Kart id is not valid")
+        }
+    }
+    return null //selected Kart is not active
+}
+
+private fun askUserToChooseLap(kart: Kart): Lap? {
+    if (kart.numberOfLaps() > 0) {
+        print(kart.listLaps())
+        return kart.findOne(readNextInt("\nEnter the id of the Lap: "))
+    }
+    else{
+        println ("No Laps for chosen note")
+        return null
+    }
+}
 
 
 
