@@ -1,0 +1,2 @@
+[90mC:\Users\diego\OneDrive\Desktop\goKartApplication\src\main\kotlin\utils\[0mScannerInput.kt[90m:[0m4[90m:1:[0m Wildcard import
+[90mC:\Users\diego\OneDrive\Desktop\goKartApplication\src\main\kotlin\utils\[0mValidateInput.kt[90m:[0m3[90m:1:[0m Wildcard import
