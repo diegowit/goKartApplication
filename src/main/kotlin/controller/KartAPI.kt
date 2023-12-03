@@ -2,6 +2,7 @@ package controller
 import models.Lap
 import models.Kart
 import persistence.Serializer
+import utils.Utilities
 import utils.Utilities.formatListString
 import utils.Utilities.isValidListIndex
 import java.util.ArrayList
@@ -56,12 +57,71 @@ class KartAPI(serializerType: Serializer) {
         return false
     }
 
+
+    fun isKartElectric(id: Int): Boolean {
+        val foundKart = findKart(id)
+
+        if (foundKart != null && !foundKart.isElectric && foundKart.checkLapCompletionStatus()) {
+            foundKart.isElectric = true
+            return true
+        }
+
+        return false
+    }
+
+
+
+
     fun listAllKart(): String =
         if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
         else formatListString(karts) // Format the list of all notes.
 
 
+    fun listElectricKarts() =
+        if (numberOfElectricKarts() == 0) "No Electric Karts stored"
+        else Utilities.formatListString(karts.filter { kart -> kart.isElectric })
+
+    fun listFuelKarts()=
+        if (numberOfFuelKarts() == 0) "No Fuel Karts stored"
+        else Utilities.formatListString(karts.filter { kart -> !kart.isElectric })
+
+
+
     fun numberOfKarts(): Int = karts.size
+    fun numberOfElectricKarts(): Int = karts.count { kart: Kart -> kart.isElectric}
+    fun numberOfFuelKarts(): Int = karts.count { kart: Kart -> !kart.isElectric}
+
+
+
+
+    fun listLapsNotCompleted(): String =
+        if (numberOfKarts() ==0) "No Karts stored"
+    else {
+
+            var listOfLapsNotCompleted = ""
+            for (kart in karts) {
+                for (lap in kart.laps) {
+                    if (!lap.isLapCompleted) {
+                        listOfLapsNotCompleted += kart.model + ":" + lap.completedLap + "\n"
+
+                    }
+                }
+            }
+            listOfLapsNotCompleted
+        }
+
+
+    fun numberOfNotCompletedLaps(): Int {
+        var numberOfNotCompletedLaps = 0
+        for (kart in karts) {
+            for (lap in kart.laps) {
+                if (!lap.isLapCompleted) {
+                    numberOfNotCompletedLaps++
+                }
+            }
+        }
+        return numberOfNotCompletedLaps
+    }
 
 
 

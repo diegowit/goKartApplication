@@ -3,11 +3,11 @@ import utils.Utilities
 data class Kart(
 
     var KartId: Int = 0,
-    var model: String ="Birel",
+    var model: String,
     var weight: Int,
     var maxSpeed: Double,
     var enginePower: Int,
-    var isElectric: Boolean,
+    var isElectric: Boolean = false,
     var laps: MutableSet<Lap> = mutableSetOf()
 
 ) {
@@ -36,6 +36,7 @@ data class Kart(
             foundLap.distance = newLap.distance
             foundLap.time = newLap.time
             foundLap.speed = newLap.speed
+            foundLap.completedLap = newLap.completedLap
             foundLap.isLapCompleted = newLap.isLapCompleted
             return true
         }
@@ -59,8 +60,10 @@ fun listLaps() =
     if (laps.isEmpty())  "\tNO LAPS ADDED"
     else  Utilities.formatSetString(laps)
 
-
-
+    override fun toString(): String {
+        val electric = if (isElectric) 'Y' else 'N'
+        return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($electric) \n${listLaps()}"
+    }
 
 
 
