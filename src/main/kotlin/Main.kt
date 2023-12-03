@@ -256,21 +256,32 @@ fun listElectricKart() {
         do {
             when (val option = lapMenu()) {
                 1 -> addLapToKart()
-                2 -> listAllLaps()
+                2 -> deleteALap()
+                3 -> updateLapDetailsInKart()
+                4 -> markLapCompletion()
 
                 0 -> return // Return to main menu
                 else -> println("Invalid menu choice: $option")
             }
         } while (true)
     }
-    fun lapMenu(): Int {
+
+//fun listAllLaps() {
+ //   val kart: Kart? = listingLapsForAll()
+ //   println(kart)
+//}
+
+
+fun lapMenu(): Int {
         return readNextInt(
             """
 ╭───────────────────────────────────────────────────╮
 │                   GROUP MENU                      │
 ├───────────────────────────────────────────────────┤
 │   1) Add a Lap to Kart                            │
-│   2) List All Laps                                │
+│   2) update Lap details                           │
+│   3) delete a lap                                 │
+│   4) Mark Lap as a complete or not complete       │
 ├───────────────────────────────────────────────────┤
 │   0) Return to Main Menu                          │
 ╰───────────────────────────────────────────────────╯
@@ -283,8 +294,23 @@ fun listElectricKart() {
 fun addLapToKart() {
     val kart: Kart? = askUserToChooseFuelKart()
     if (kart != null) {
-        val completedLap = readNextLine("lap details: ")
-        if (kart.addLap(Lap(completedLap = completedLap))) {
+        val driverName = readNextLine("Enter driver name: ")
+        val driverAge = readNextInt("Enter driver age: ")
+        val distance = readNextDouble("Enter lap distance: ")
+        val time = readNextDouble("Enter lap time: ")
+        val speed = readNextDouble("Enter lap speed: ")
+        val completedLapDetails = readNextLine("Enter lap details: ")
+
+        val lapToAdd = Lap(
+            driverName = driverName,
+            driverAge = driverAge,
+            distance = distance,
+            time = time,
+            speed = speed,
+            completedLap = completedLapDetails
+        )
+
+        if (kart.addLap(lapToAdd)) {
             println("Add Successful!")
         } else {
             println("Add NOT Successful")
@@ -293,8 +319,68 @@ fun addLapToKart() {
 }
 
 
-
-
+fun markLapCompletion() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            var changeStatus = 'X'
+            if (lap.isLapCompleted) {
+                changeStatus = readNextChar("The lap is currently complete...do you want to mark it as Not Completed?")
+                if ((changeStatus == 'Y') || (changeStatus == 'y')) {
+                    lap.isLapCompleted = false
+                    println("Marked lap as Not Completed.")
+                }
+            } else {
+                changeStatus = readNextChar("The lap is currently Not Completed...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') || (changeStatus == 'y')) {
+                    lap.isLapCompleted = true
+                    println("Marked lap as Complete.")
+                }
+            }
+        }
+    }
+}
+fun deleteALap() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            val isDeleted = kart.deleteLap(lap.lapId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+fun updateLapDetailsInKart() {
+    val kart: Kart? = askUserToChooseFuelKart()
+    if (kart != null) {
+        val lap: Lap? = askUserToChooseLap(kart)
+        if (lap != null) {
+            val newDetails = readNextLine("Enter new lap details: ")
+            val updatedLap = Lap(
+                lapId = lap.lapId,
+                driverName = lap.driverName,
+                driverAge = lap.driverAge,
+                distance = lap.distance,
+                time = lap.time,
+                speed = lap.speed,
+                completedLap = newDetails,
+                isLapCompleted = lap.isLapCompleted
+            )
+            if (kart.updateLap(lap.lapId, updatedLap)) {
+                println("Lap details updated")
+            } else {
+                println("Lap details NOT updated")
+            }
+        } else {
+            println("Invalid Lap Id")
+        }
+    }
+}
 
 //------------------------------------
 //HELPER FUNCTIONS
@@ -317,21 +403,28 @@ private fun askUserToChooseFuelKart(): Kart? {
     return null //selected Kart is not active
 }
 
-private fun askUserToChooseLap(kart: Kart): Lap? {
+
+
+    private fun askUserToChooseLap(kart: Kart): Lap? {
+        return if (kart.numberOfLaps() > 0) {
+            print(kart.listLaps())
+            kart.findOne(readNextInt("\nEnter the id of the Lap: "))
+        } else {
+            println("No Laps for chosen note")
+            null
+        }
+    }
+/**
+private fun listingLapsForAll(kart: Kart): Kart? {
     if (kart.numberOfLaps() > 0) {
-        print(kart.listLaps())
-        return kart.findOne(readNextInt("\nEnter the id of the Lap: "))
+        println(kart.listLaps())
+        println("\nAll Laps ")
+    } else {
+        println("No Laps stored")
     }
-    else{
-        println ("No Laps for chosen note")
-        return null
-    }
+
 }
-
-
-
-
-
+**/
     fun save() {
         try {
             kartAPI.store()
@@ -364,6 +457,7 @@ private fun askUserToChooseLap(kart: Kart): Lap? {
         )
         exitProcess(0)
     }
+
 
 
 
