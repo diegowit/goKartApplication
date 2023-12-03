@@ -63,6 +63,17 @@ class KartAPI(serializerType: Serializer) {
 
     fun numberOfKarts(): Int = karts.size
 
+    fun isKartElectric(id: Int): Boolean {
+        val foundKart = findKart(id)
+
+        if (foundKart != null && !foundKart.isElectric && foundKart.checkLapCompletionStatus()) {
+            foundKart.isElectric = true
+            return true
+        }
+
+        return false
+    }
+
 
 
     @Throws(Exception::class)
