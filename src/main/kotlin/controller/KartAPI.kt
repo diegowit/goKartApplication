@@ -95,6 +95,37 @@ class KartAPI(serializerType: Serializer) {
 
 
 
+    fun listLapsNotCompleted(): String =
+        if (numberOfKarts() ==0) "No Karts stored"
+    else {
+
+            var listOfLapsNotCompleted = ""
+            for (kart in karts) {
+                for (lap in kart.laps) {
+                    if (!lap.isLapCompleted) {
+                        listOfLapsNotCompleted += kart.model + ":" + lap.completedLap + "\n"
+
+                    }
+                }
+            }
+            listOfLapsNotCompleted
+        }
+
+
+    fun numberOfNotCompletedLaps(): Int {
+        var numberOfNotCompletedLaps = 0
+        for (kart in karts) {
+            for (lap in kart.laps) {
+                if (!lap.isLapCompleted) {
+                    numberOfNotCompletedLaps++
+                }
+            }
+        }
+        return numberOfNotCompletedLaps
+    }
+
+
+
     @Throws(Exception::class)
     fun load() {
         karts = serializer.read() as ArrayList<Kart>

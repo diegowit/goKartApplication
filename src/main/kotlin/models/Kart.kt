@@ -7,7 +7,7 @@ data class Kart(
     var weight: Int,
     var maxSpeed: Double,
     var enginePower: Int,
-    var isElectric: Boolean,
+    var isElectric: Boolean = false,
     var isFuel: Boolean,
     var laps: MutableSet<Lap> = mutableSetOf()
 
@@ -37,7 +37,7 @@ data class Kart(
             foundLap.distance = newLap.distance
             foundLap.time = newLap.time
             foundLap.speed = newLap.speed
-            foundLap.completedLab = newLap.completedLab
+            foundLap.completedLap = newLap.completedLap
             foundLap.isLapCompleted = newLap.isLapCompleted
             return true
         }
@@ -63,7 +63,7 @@ fun listLaps() =
 
     override fun toString(): String {
         val electric = if (isElectric) 'Y' else 'N'
-        return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($isElectric) \n${listLaps()}"
+        return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($electric) \n${listLaps()}"
     }
 
 
