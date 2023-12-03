@@ -484,7 +484,7 @@ fun runLapSearchMenu() {
                   > ----------------------------------
                   > |   1) search Laps              |
                   > |   2) List Not Completed Laps  |
-               
+                  > |   3) Search By Driver Name    |
                   > ----------------------------------
                   > ==>> """.trimMargin(">"))
 
@@ -492,6 +492,7 @@ fun runLapSearchMenu() {
         when (option) {
             1 -> searchLaps()
             2 -> listNotCompletedLaps()
+            3 -> searchByName()
 
 
             // Handle unexpected option entries.
@@ -521,7 +522,15 @@ fun listNotCompletedLaps() {
     println(kartAPI.listFuelKarts())
 }
 
-
+fun searchByName(){
+    val searchName = readNextLine("Enter the Name of the Driver: ")
+    val searchResults = kartAPI.searchLapByDriverName(searchName)
+    if (searchResults.isEmpty()) {
+        println("No Laps found")
+    } else {
+        println(searchResults)
+    }
+}
 
 //------------------------------------
 //HELPER FUNCTIONS

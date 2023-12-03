@@ -106,6 +106,24 @@ class KartAPI(serializerType: Serializer) {
 
 
 
+    fun searchLapByDriverName(searchString: String): String {
+        return if (numberOfElectricKarts() == 0) "No Karts stored"
+        else {
+            var listOfKart = ""
+            for (kart in karts) {
+                for (lap in kart.laps) {
+                    if (lap.driverName.contains(searchString, ignoreCase = true)) {
+                        listOfKart += "${kart.KartId}: ${kart.maxSpeed} \n\t${lap}\n"
+                    }
+                }
+            }
+            if (listOfKart == "") "No Laps found for: $searchString"
+            else listOfKart
+        }
+    }
+
+
+
 
     fun SearchLapsNotCompleted(searchDetails: String): String =
         if (numberOfKarts() ==0) "No Karts stored"
