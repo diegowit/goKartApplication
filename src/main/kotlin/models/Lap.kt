@@ -5,9 +5,9 @@ data class Lap (
     var driverName: String,
     var driverAge: Int,
     var distance: Double,
-    val time: Double,
-    val speed: Double,
-    val isLapCompleted: Boolean = false
+    var time: Double,
+    var speed: Double,
+    var isLapCompleted: Boolean = false
 
         )
 
