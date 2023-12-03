@@ -7,6 +7,7 @@ data class Lap (
     var distance: Double,
     var time: Double,
     var speed: Double,
+    var completedLab: String,
     var isLapCompleted: Boolean = false
 
         )
@@ -15,9 +16,9 @@ data class Lap (
     override fun toString(): String {
 
         if (isLapCompleted)
-            return "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $isLapCompleted\" (Yes)   "
+            return "$lapId: Name: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $completedLab:\" (Lap Was Complete)   "
         else
-            return "$lapId: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $isLapCompleted\" (No)   "
+            return "$lapId: Name: $driverName, Age: $driverAge, Distance: $distance, Time: $time, Speed: $speed, Completed: $completedLab:\" (Lap Was not Complete)   "
 
 
     }

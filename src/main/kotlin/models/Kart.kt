@@ -37,6 +37,7 @@ data class Kart(
             foundLap.distance = newLap.distance
             foundLap.time = newLap.time
             foundLap.speed = newLap.speed
+            foundLap.completedLab = newLap.completedLab
             foundLap.isLapCompleted = newLap.isLapCompleted
             return true
         }
@@ -60,6 +61,10 @@ fun listLaps() =
     if (laps.isEmpty())  "\tNO LAPS ADDED"
     else  Utilities.formatSetString(laps)
 
+    override fun toString(): String {
+        val electric = if (isElectric) 'Y' else 'N'
+        return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($isElectric) \n${listLaps()}"
+    }
 
 
 
