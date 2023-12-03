@@ -22,10 +22,10 @@ data class Kart(
     fun deleteLap(id: Int): Boolean {
         return laps.removeIf { lap -> lap.lapId == id }
     }
-  fun numberOfLaps() = laps.size
+    fun numberOfLaps() = laps.size
 
-    fun findOne(id: Int): Lap?{
-        return laps.find { lap -> lap.lapId == id  }
+    fun findOne(id: Int): Lap? {
+        return laps.find { lap -> lap.lapId == id }
     }
     fun updateLap(id: Int, newLap: Lap): Boolean {
         val foundLap = findOne(id)
@@ -41,7 +41,7 @@ data class Kart(
             return true
         }
 
-        //if the object was not found, return false, indicating that the update was not successful
+        // if the object was not found, return false, indicating that the update was not successful
         return false
     }
 
@@ -56,28 +56,12 @@ data class Kart(
         return true
     }
 
-fun listLaps() =
-    if (laps.isEmpty())  "\tNO LAPS ADDED"
-    else  Utilities.formatSetString(laps)
+    fun listLaps() =
+        if (laps.isEmpty()) "\tNO LAPS ADDED"
+        else Utilities.formatSetString(laps)
 
     override fun toString(): String {
         val electric = if (isElectric) 'Y' else 'N'
         return "$KartId: Model: $model, weight($weight), Max Speed($maxSpeed), enginePower($enginePower), Electric($electric) \n${listLaps()}"
     }
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-

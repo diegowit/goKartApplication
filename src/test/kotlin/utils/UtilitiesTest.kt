@@ -2,12 +2,8 @@ package utils
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import controller.KartAPI
-import models.Kart
-import models.Lap
 
 class UtilitiesTest {
-
 
     @Test
     fun validRangeWorksWithPositiveTestData() {

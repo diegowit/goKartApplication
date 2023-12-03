@@ -9,10 +9,8 @@ class KartAPI(serializerType: Serializer) {
     private var serializer: Serializer = serializerType
     private var karts: MutableList<Kart> = mutableListOf()
 
-
     private var lastId = 0
     private fun getId() = lastId++
-
 
     fun isValidIndex(index: Int): Boolean {
         return isValidListIndex(index, karts)
@@ -23,7 +21,6 @@ class KartAPI(serializerType: Serializer) {
             karts[index]
         } else null
     }
-
 
     fun add(kart: Kart): Boolean {
         kart.KartId = getId()
@@ -37,10 +34,10 @@ class KartAPI(serializerType: Serializer) {
     }
 
     fun updateKart(indexToUpdate: Int, kart: Kart?): Boolean {
-        //find the note object by the index number
+        // find the note object by the index number
         val foundKart = findKart(indexToUpdate)
 
-        //if the note exists, use the note details passed as parameters to update the found note in the ArrayList.
+        // if the note exists, use the note details passed as parameters to update the found note in the ArrayList.
         if ((foundKart != null) && (kart != null)) {
             foundKart.KartId = kart.KartId
             foundKart.model = kart.model
@@ -51,10 +48,9 @@ class KartAPI(serializerType: Serializer) {
             foundKart.laps = kart.laps
             return true
         }
-        //if the note was not found, return false, indicating that the update was not successful
+        // if the note was not found, return false, indicating that the update was not successful
         return false
     }
-
 
     fun isKartElectric(id: Int): Boolean {
         val foundKart = findKart(id)
@@ -67,32 +63,21 @@ class KartAPI(serializerType: Serializer) {
         return false
     }
 
-
-
-
     fun listAllKart(): String =
         if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
         else formatListString(karts) // Format the list of all notes.
-
 
     fun listElectricKarts() =
         if (numberOfElectricKarts() == 0) "No Electric Karts stored"
         else Utilities.formatListString(karts.filter { kart -> kart.isElectric })
 
-    fun listFuelKarts()=
+    fun listFuelKarts() =
         if (numberOfFuelKarts() == 0) "No Fuel Karts stored"
         else Utilities.formatListString(karts.filter { kart -> !kart.isElectric })
 
-
-
-
     fun numberOfKarts(): Int = karts.size
-    fun numberOfElectricKarts(): Int = karts.count { kart: Kart -> kart.isElectric}
-    fun numberOfFuelKarts(): Int = karts.count { kart: Kart -> !kart.isElectric}
-
-
-
-
+    fun numberOfElectricKarts(): Int = karts.count { kart: Kart -> kart.isElectric }
+    fun numberOfFuelKarts(): Int = karts.count { kart: Kart -> !kart.isElectric }
 
     fun searchByModel(searchString: String) =
         formatListString(karts.filter { kart -> kart.model.contains(searchString, ignoreCase = true) })
@@ -102,9 +87,6 @@ class KartAPI(serializerType: Serializer) {
 
     fun searchByEP(searchInt: Int) =
         formatListString(karts.filter { kart -> kart.enginePower == searchInt })
-
-
-
 
     fun searchLapByDriverName(searchString: String): String {
         return if (numberOfElectricKarts() == 0) "No Karts stored"
@@ -122,25 +104,20 @@ class KartAPI(serializerType: Serializer) {
         }
     }
 
-
-
-
     fun SearchLapsNotCompleted(searchDetails: String): String =
-        if (numberOfKarts() ==0) "No Karts stored"
-    else {
+        if (numberOfKarts() == 0) "No Karts stored"
+        else {
 
             var listOfLapsNotCompleted = ""
             for (kart in karts) {
                 for (lap in kart.laps) {
                     if (!lap.isLapCompleted) {
                         listOfLapsNotCompleted += kart.model + ":" + lap.completedLap + "\n"
-
                     }
                 }
             }
             listOfLapsNotCompleted
         }
-
 
     fun numberOfNotCompletedLaps(): Int {
         var numberOfNotCompletedLaps = 0
@@ -154,8 +131,6 @@ class KartAPI(serializerType: Serializer) {
         return numberOfNotCompletedLaps
     }
 
-
-
     @Throws(Exception::class)
     fun load() {
         karts = serializer.read() as ArrayList<Kart>
@@ -166,24 +141,9 @@ class KartAPI(serializerType: Serializer) {
         serializer.write(karts)
     }
 
-    private fun formatListString(kartsToFormat : List<Kart>) : String =
+    private fun formatListString(kartsToFormat: List<Kart>): String =
         kartsToFormat
-            .joinToString (separator = "\n") { kart ->
-                karts.indexOf(kart).toString() + ": " + kart.toString() }
-
+            .joinToString(separator = "\n") { kart ->
+                karts.indexOf(kart).toString() + ": " + kart.toString()
+            }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
