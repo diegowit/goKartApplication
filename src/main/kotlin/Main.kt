@@ -122,6 +122,11 @@ fun contactMenu(): Int {
     )
 }
 
+/**
+* Function to add a new kart to the kartAPI.
+* User is prompted to enter details such as model, weight, maxSpeed, and enginePower.
+* Displays a success message upon successful addition and a failure message otherwise.
+*/
 fun addKart() {
     val model = readValidModel("Enter the karts model (Tony Kart, Birel, Other)")
     val weight = readValidWeight("Enter a weight between (70 to 80 kg): ")
@@ -136,6 +141,11 @@ fun addKart() {
     }
 }
 
+/**
+ * Function to update a kart's details in the kartAPI.
+ * User is prompted to enter the id of the kart to update and new details such as model, weight, maxSpeed, and enginePower.
+ * Displays a success message upon successful update and a failure message otherwise.
+ */
 fun updateKart() {
     listAllKarts()
     if (kartAPI.numberOfKarts() > 0) {
@@ -157,6 +167,12 @@ fun updateKart() {
     }
 }
 
+/**
+ * Function to delete a kart from the kartAPI.
+ * User is prompted to enter the id of the kart to delete.
+ * Displays a success message and deleted kart details upon successful deletion,
+ * or a failure message if the kart is not found.
+ */
 fun deleteKart() {
     if (kartAPI.numberOfKarts() > 0) {
         listAllKarts()
@@ -175,6 +191,11 @@ fun deleteKart() {
     }
 }
 
+/**
+ * Function to convert a fuel-based kart to an electric kart in the kartAPI.
+ * User is prompted to enter the id of the kart to convert to electric.
+ * Displays a success message upon successful conversion and a failure message otherwise.
+ */
 fun makeItElectric() {
     if (kartAPI.numberOfFuelKarts() > 0) {
         listAllKarts()
@@ -222,14 +243,26 @@ fun runListingMenu() {
     }
 }
 
+/**
+ * Function to list all karts in the kartAPI.
+ * Displays the formatted list of all karts.
+ */
 fun listAllKarts() {
     println(kartAPI.listAllKart())
 }
 
+/**
+ * Function to list fuel-based karts in the kartAPI.
+ * Displays the formatted list of fuel-based karts.
+ */
 fun listFuelKart() {
     println(kartAPI.listFuelKarts())
 }
 
+/**
+ * Function to list electric karts in the kartAPI.
+ * Displays the formatted list of electric karts.
+ */
 fun listElectricKart() {
     println(kartAPI.listElectricKarts())
 }
@@ -277,24 +310,27 @@ fun searchMenu(): Int {
     // Returning the user input as an integer.
 }
 
+/**
+ * Function to search for karts by model in the kartAPI.
+ * Displays the formatted list of karts matching the specified model.
+ */
 fun searchKartByModel() {
-
     val searchModel = readNextLine("Enter the model to search by:(Tony Kart, Birel, Other) ")
-
     val searchResults = kartAPI.searchByModel(searchModel)
 
     if (searchResults.isEmpty()) {
-
         println("No Model found")
     } else {
-
         println(searchResults)
     }
 }
 
+/**
+ * Function to search for karts by weight in the kartAPI.
+ * Displays the formatted list of karts matching the specified weight.
+ */
 fun searchKartByWeight() {
     val searchWeight = readNextInt("Enter Weight of the kart")
-
     val searchResults = kartAPI.searchByWeight(searchWeight)
 
     if (searchResults.isEmpty()) {
@@ -304,9 +340,12 @@ fun searchKartByWeight() {
     }
 }
 
+/**
+ * Function to search for karts by engine power in the kartAPI.
+ * Displays the formatted list of karts matching the specified engine power.
+ */
 fun searchKartByEnginePower() {
     val searchEP = readNextInt("Enter Engine Power of the kart")
-
     val searchResults = kartAPI.searchByEP(searchEP)
 
     if (searchResults.isEmpty()) {
