@@ -2,6 +2,7 @@ package controller
 import models.Lap
 import models.Kart
 import persistence.Serializer
+import utils.Utilities
 import utils.Utilities.formatListString
 import utils.Utilities.isValidListIndex
 import java.util.ArrayList
@@ -49,6 +50,7 @@ class KartAPI(serializerType: Serializer) {
             foundKart.maxSpeed = kart.maxSpeed
             foundKart.enginePower = kart.enginePower
             foundKart.isElectric = kart.isElectric
+            foundKart.isFuel = kart.isFuel
             foundKart.laps = kart.laps
             return true
         }
@@ -56,12 +58,6 @@ class KartAPI(serializerType: Serializer) {
         return false
     }
 
-    fun listAllKart(): String =
-        if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
-        else formatListString(karts) // Format the list of all notes.
-
-
-    fun numberOfKarts(): Int = karts.size
 
     fun isKartElectric(id: Int): Boolean {
         val foundKart = findKart(id)
@@ -73,6 +69,29 @@ class KartAPI(serializerType: Serializer) {
 
         return false
     }
+
+
+
+
+    fun listAllKart(): String =
+        if (karts.isEmpty()) "No Karts stored" // Check for empty notes list.
+        else formatListString(karts) // Format the list of all notes.
+
+
+    fun listElectricKarts() =
+        if (numberOfElectricKarts() == 0) "No Electric Karts stored"
+        else Utilities.formatListString(karts.filter { kart -> kart.isElectric })
+
+    fun listFuelKarts()=
+        if (numberOfFuelKarts() == 0) "No Fuel Karts stored"
+        else Utilities.formatListString(karts.filter { kart -> !kart.isElectric })
+
+
+
+    fun numberOfKarts(): Int = karts.size
+    fun numberOfElectricKarts(): Int = karts.count { kart: Kart -> kart.isElectric}
+    fun numberOfFuelKarts(): Int = karts.count { kart: Kart -> !kart.isElectric}
+
 
 
 
